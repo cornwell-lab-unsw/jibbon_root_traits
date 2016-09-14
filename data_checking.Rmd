@@ -1,0 +1,58 @@
+# This is the data merging and checking file
+
+This is file that loads all the raw data from the Jibbon root trait project.  Then it stickes the datasets together and does a bunch of checks looking for:
+
+1. Missing data
+2. Duplicate data
+3. Outliers
+4. Spelling mistakes
+
+
+Loading all the data
+```{r}
+library(tidyverse)
+air_porosity<-read_csv("data/air_porosity.csv")
+cluster_root_weight<-read_csv("data/cluster_root_weight_data.csv")
+dry_root_weight_1<-read_csv("data/Weight_oven_dried.csv")
+dry_root_weight_2<-read_csv("data/dry_root_weight.csv")
+root_length_data<-read_csv("data/Root_Length_manual_V1.csv")
+```
+
+
+assemble mass data from two different files
+```{r}
+mass_data<-rbind(dry_root_weight_1,dry_root_weight_2)
+```
+
+make a column in the mass data set that is the unique id for matching
+```{r}
+mass_data$unique_id<-paste0(mass_data$site,mass_data$sample,mass_data$species,mass_data$replicate)
+head(sort(table(mass_data$unique_id),decreasing = TRUE))
+filter(mass_data,unique_id=="S17S3Gonocarpus tetragynus3")
+```
+
+make a column in the root length set that is the unique id for matching and check for duplicates
+
+```{r}
+root_length_data$unique_id<-paste0(root_length_data$site,root_length_data$sample,root_length_data$species,root_length_data$replicate)
+head(sort(table(root_length_data$unique_id),decreasing = TRUE))
+filter(root_length_data,unique_id=="S14S1Leptocarpus tenax1")
+```
+
+Unique IDs in mass data that don't match the root length data
+
+```{r}
+mass_data$unique_id[!mass_data$unique_id %in% root_length_data$unique_id]
+```
+
+
+Things in root length data that don't match the mass data.
+
+```{r}
+root_length_data$unique_id[!root_length_data$unique_id %in% mass_data$unique_id]
+```
+
+
+
+
+
