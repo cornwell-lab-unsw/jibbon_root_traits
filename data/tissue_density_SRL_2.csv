@@ -104,15 +104,15 @@ S11,S3,UD,Hypoleana fastigata,hypo,3,0.0359,0.0082
 S11,S1,UD,Lomandra obliqua,loma,1,0.2354,0.0005
 S11,S2,UD,Lomandra obliqua,loma,2,0.2807,0.0043
 S11,S3,UD,Lomandra obliqua,loma,3,0.5099,0.0051
-S11,S1,UD,CaustisÊpentandra,caustis,1,0.8888,0.0015
-S11,S2,UD,CaustisÊpentandra,caustis,2,0.2942,0.0068
-S11,S3,UD,CaustisÊpentandra,caustis,3,0.2974,0.0078
+S11,S1,UD,Caustisæpentandra,caustis,1,0.8888,0.0015
+S11,S2,UD,Caustisæpentandra,caustis,2,0.2942,0.0068
+S11,S3,UD,Caustisæpentandra,caustis,3,0.2974,0.0078
 S11,S1,UD,Banksia serrata,serr,1,0.0434,0.0034
 S11,S2,UD,Banksia serrata,serr,2,0.0537,0.0007
 S11,S3,UD,Banksia serrata,serr,3,0.3277,0.0021
-S12,S1,UD,CaustisÊpentandra,caustis,1,0.3717,0.0008
-S12,S2,UD,CaustisÊpentandra,caustis,2,0.4242,0.0012
-S12,S3,UD,CaustisÊpentandra,caustis,3,0.1034,0.0006
+S12,S1,UD,Caustisæpentandra,caustis,1,0.3717,0.0008
+S12,S2,UD,Caustisæpentandra,caustis,2,0.4242,0.0012
+S12,S3,UD,Caustisæpentandra,caustis,3,0.1034,0.0006
 S12,S1,UD,Lepidosperma concavum,conca,1,0.0351,0.005
 S12,S2,UD,Lepidosperma concavum,conca,2,0.0387,0.0082
 S12,S3,UD,Lepidosperma concavum,conca,3,0.0405,0.0039
@@ -125,9 +125,9 @@ S12,S3,UD,Hypoleana fastigata,hypo,3,0.2553,0.0019
 S12,S1,UD,Banksia serrata,serr,1,0.0797,0.0056
 S12,S2,UD,Banksia serrata,serr,2,0.0852,0.0031
 S12,S3,UD,Banksia serrata,serr,3,0.0752,0.0041
-S13,S1,BD,CaustisÊpentandra,caustis,1,0.185,0.0035
-S13,S2,BD,CaustisÊpentandra,caustis,2,0.4362,0.0006
-S13,S3,BD,CaustisÊpentandra,caustis,3,0.0426,0.0002
+S13,S1,BD,Caustisæpentandra,caustis,1,0.185,0.0035
+S13,S2,BD,Caustisæpentandra,caustis,2,0.4362,0.0006
+S13,S3,BD,Caustisæpentandra,caustis,3,0.0426,0.0002
 S13,S1,BD,Hypoleana fastigata,hypo,1,0.066,0.0068
 S13,S2,BD,Hypoleana fastigata,hypo,2,0.2639,0.0028
 S13,S3,BD,Hypoleana fastigata,hypo,3,0.1797,0.0031
