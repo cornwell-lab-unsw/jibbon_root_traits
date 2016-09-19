@@ -9,7 +9,7 @@ This is file that loads all the raw data from the Jibbon root trait project.  Th
 
 
 Loading all the data
-```{r,echo=FALSE}
+```{r,echo=TRUE,message=FALSE}
 library(tidyverse)
 air_porosity<-read_csv("data/air_porosity_complete.csv")
 cluster_root_weight<-read_csv("data/cluster_root_weight_data_complete.csv")
@@ -50,6 +50,20 @@ Things in root length data that don't match the mass data.
 
 ```{r}
 root_length_data$unique_id[!root_length_data$unique_id %in% mass_data$unique_id]
+```
+
+Then we match everything up and calculate SRL
+
+```{r}
+full_join(mass_data,root_length_data,by="unique_id") %>%
+  mutate(specific_root_length=Length_cm/SRL) -> SRL.DF
+
+library(plotly)
+gg<-ggplot(SRL.DF,aes(x=specific_root_length,fill=species_code.x))+geom_histogram()+scale_x_log10()
+ggplotly(gg)
+
+gg<-ggplot(SRL.DF,aes(y=specific_root_length,x=species_code.x))+geom_violin()+scale_y_log10()
+gg
 ```
 
 
