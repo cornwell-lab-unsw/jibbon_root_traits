@@ -9,13 +9,13 @@ This is file that loads all the raw data from the Jibbon root trait project.  Th
 
 
 Loading all the data
-```{r}
+```{r,echo=FALSE}
 library(tidyverse)
-air_porosity<-read_csv("data/air_porosity.csv")
-cluster_root_weight<-read_csv("data/cluster_root_weight_data.csv")
-dry_root_weight_1<-read_csv("data/Weight_oven_dried.csv")
-dry_root_weight_2<-read_csv("data/dry_root_weight.csv")
-root_length_data<-read_csv("data/Root_Length_manual_V1.csv")
+air_porosity<-read_csv("data/air_porosity_complete.csv")
+cluster_root_weight<-read_csv("data/cluster_root_weight_data_complete.csv")
+dry_root_weight_1<-read_csv("data/tissue_density_SRL_1.csv")
+dry_root_weight_2<-read_csv("data/tissue_density_SRL_2.csv")
+root_length_data<-read_csv("data/branching_intensity_srl_lenght_complete.csv")
 ```
 
 
@@ -28,7 +28,7 @@ make a column in the mass data set that is the unique id for matching
 ```{r}
 mass_data$unique_id<-paste0(mass_data$site,mass_data$sample,mass_data$species,mass_data$replicate)
 head(sort(table(mass_data$unique_id),decreasing = TRUE))
-filter(mass_data,unique_id=="S17S3Gonocarpus tetragynus3")
+filter(mass_data,unique_id=="S18S1Banksia oblongifolia1")
 ```
 
 make a column in the root length set that is the unique id for matching and check for duplicates
@@ -36,7 +36,7 @@ make a column in the root length set that is the unique id for matching and chec
 ```{r}
 root_length_data$unique_id<-paste0(root_length_data$site,root_length_data$sample,root_length_data$species,root_length_data$replicate)
 head(sort(table(root_length_data$unique_id),decreasing = TRUE))
-filter(root_length_data,unique_id=="S14S1Leptocarpus tenax1")
+filter(root_length_data,unique_id=="S20S1Plinthanthesis paradoxa1")
 ```
 
 Unique IDs in mass data that don't match the root length data
