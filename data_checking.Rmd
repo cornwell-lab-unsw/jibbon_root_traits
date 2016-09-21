@@ -103,8 +103,8 @@ filter(air_porosity,unique_id=="S14S2Lepidosperma neesii2")
 Calculate density:
 
 ```{r}
-full_join(air_porosity,mass_data) %>%
-  select(site,sample,site_class,species,root_volume,TD) %>%
+full_join(air_porosity,mass_data,by=c("site", "sample","species")) %>%
+  select(site,sample,species,root_volume,TD) %>%
   mutate(density=TD/root_volume)-> density.df
 ```
 
@@ -125,7 +125,6 @@ gg<-ggplot(density.df,aes(x=density,fill=species))+geom_histogram()+scale_x_log1
 Checking for outliers:
 
 ```{r}
-density.df<-select(density.df,-site_class)
 arrange(density.df,density) 
 
 arrange(density.df,desc(density)) 
