@@ -30,16 +30,17 @@ mass_data<-rbind(dry_root_weight_1,dry_root_weight_2)
 make a column in the mass data set that is the unique id for matching
 ```{r}
 mass_data$unique_id<-paste0(mass_data$site,mass_data$sample,mass_data$species,mass_data$replicate)
-head(sort(table(mass_data$unique_id),decreasing = TRUE))
-filter(mass_data,unique_id=="S18S1Banksia oblongifolia1")
 ```
 
+Are there any duplicates?
+```{r}
+sum(table(mass_data$unique_id)>2)
+```
 make a column in the root length set that is the unique id for matching and check for duplicates
 
 ```{r}
 root_length_data$unique_id<-paste0(root_length_data$site,root_length_data$sample,root_length_data$species,root_length_data$replicate)
-head(sort(table(root_length_data$unique_id),decreasing = TRUE))
-filter(root_length_data,unique_id=="S20S1Plinthanthesis paradoxa1")
+sum(table(root_length_data$unique_id)>1)
 ```
 
 Unique IDs in mass data that don't match the root length data
@@ -57,22 +58,75 @@ root_length_data$unique_id[!root_length_data$unique_id %in% mass_data$unique_id]
 
 Then we match everything up and calculate SRL
 
-```{r}
+```{r,message=FALSE,eval=TRUE,echo=TRUE}
 full_join(mass_data,root_length_data,by="unique_id") %>%
   mutate(specific_root_length=Length_cm/SRL) -> SRL.DF
-
-library(plotly)
-gg<-ggplot(SRL.DF,aes(x=specific_root_length,fill=species_code.x))+geom_histogram()+scale_x_log10()
-ggplotly(gg)
-
-gg<-ggplot(SRL.DF,aes(y=specific_root_length,x=species_code.x))+geom_violin()+scale_y_log10()
-gg
 ```
 
-Let's calculate density
+
+```{r,message=FALSE,eval=FALSE,echo=FALSE}
+library(plotly)
+gg<-ggplot(SRL.DF,aes(x=specific_root_length,fill=species_code.x))+geom_histogram()+scale_x_log10()
+
+ggplotly(gg)
+
+```
+
+Checking the outliers
+
+```{r,echo=TRUE,eval=TRUE}
+arrange(SRL.DF,desc(specific_root_length)) %>%
+  select(unique_id=unique_id,mass=SRL,Length_cm=Length_cm,srl=specific_root_length)->SRL.DF.ORDERED
+
+SRL.DF.ORDERED[1:10,]
+
+arrange(SRL.DF,specific_root_length) %>%
+  select(unique_id=unique_id,mass=SRL,Length_cm=Length_cm,srl=specific_root_length)->SRL.DF.ORDERED
+
+SRL.DF.ORDERED[1:10,]
+```
+
+Let's calculate density. 
+
+Checking for duplicate samples
 
 ```{r}
 air_porosity$unique_id<-paste0(air_porosity$site,air_porosity$sample,air_porosity$species,air_porosity$replicate)
 out<-sort(table(air_porosity$unique_id),decreasing = TRUE)
 out[out>1]
+filter(air_porosity,unique_id=="S14S2Lepidosperma neesii2")
+
+
+
+```
+
+Calculate density:
+
+```{r}
+full_join(air_porosity,mass_data) %>%
+  select(site,sample,site_class,species,root_volume,TD) %>%
+  mutate(density=TD/root_volume)-> density.df
+```
+
+
+Check for missing values either for volume or for mass
+```{r}
+density_missing_data<-filter(density.df,is.na(density))
+write_csv(density_missing_data,"outputs/density_missing_data.csv")
+density_missing_data
+```
+
+
+```{r}
+gg<-ggplot(density.df,aes(x=density,fill=species))+geom_histogram()+scale_x_log10()
+```
+
+
+Checking for outliers:
+
+```{r}
+density.df<-select(density.df,-site_class)
+arrange(density.df,density) 
+
+arrange(density.df,desc(density)) 
 ```
