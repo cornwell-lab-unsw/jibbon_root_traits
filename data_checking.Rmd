@@ -194,6 +194,7 @@ group_by(test,species)%>%
 ## Assmbling the mega_csv
 
 ```{r}
+root_length_data<- mutate(root_length_data,rbi=Number_of_tips/Length_cm)
 srl.for.joining<-select(SRL.DF,site=site.x,sample=sample.x,species=species.x,srl=specific_root_length,unique_id)
 density.df.for.joining<-select(density.df,site,sample,species,density)
 root.length.data.for.joining<-select(root_length_data,site,sample,species,rbi)
@@ -207,12 +208,12 @@ full_join(density.df.for.joining,root.length.data.for.joining) %>%
 
   write_csv(mass_df,"mass_output.csv")
   
-  filter(mass_df,air_porosity>0)%>%
-  ggplot(aes(x=som,y=air_porosity))+geom_point()+geom_smooth(method = "lm",se=FALSE)+scale_x_log10()->gg
-  ggplotly(gg)
+  #filter(mass_df,air_porosity>0)%>%
+  #ggplot(aes(x=som,y=air_porosity))+geom_point()+geom_smooth(method = "lm",se=FALSE)+scale_x_log10()->gg
+  #ggplotly(gg)
   
-  ggplot(aes(x=som,y=air_porosity))+geom_point()+geom_smooth(method = "lm",se=FALSE)+scale_x_log10()->gg
-  ggplotly(gg)
+  #ggplot(aes(x=som,y=air_porosity))+geom_point()+geom_smooth(method = "lm",se=FALSE)+scale_x_log10()->gg
+  #ggplotly(gg)
   
 ```
 
