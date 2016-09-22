@@ -14,29 +14,37 @@ This is file that loads all the raw data from the Jibbon root trait project.  Th
 Loading all the data
 ```{r,echo=TRUE,message=FALSE}
 library(tidyverse)
-air_porosity<-read_csv("data/air_porosity_complete.csv")
-cluster_root_weight<-read_csv("data/cluster_root_weight_data_complete.csv")
-dry_root_weight_1<-read_csv("data/tissue_density_SRL_1.csv")
-dry_root_weight_2<-read_csv("data/tissue_density_SRL_2.csv")
-root_length_data<-read_csv("data/branching_intensity_srl_lenght_complete.csv")
+air_porosity <- read_csv("data/air_porosity_complete.csv")
+cluster_root_weight <- read_csv("data/cluster_root_weight_data_complete.csv")
+dry_root_weight_1 <- read_csv("data/tissue_density_SRL_1.csv")
+dry_root_weight_2 <- read_csv("data/tissue_density_SRL_2.csv")
+root_length_data <- read_csv("data/branching_intensity_srl_lenght_complete.csv")
 ```
 
 
-assemble mass data from two different files
+assemble mass data from two different files and make a column in the mass data set that is the unique id for matching
 ```{r}
-mass_data<-rbind(dry_root_weight_1,dry_root_weight_2)
+bind_rows(dry_root_weight_1,dry_root_weight_2) %>%
+  mutate(unique_id=paste0(site,sample,species,replicate)) %>%
+  gather(key=type_of_data,value = mass_measurement,SRL,TD) -> mass_data_gathered
 ```
 
-make a column in the mass data set that is the unique id for matching
+Are there any duplicates for SRL?
 ```{r}
-mass_data$unique_id<-paste0(mass_data$site,mass_data$sample,mass_data$species,mass_data$replicate)
+srl.mass.data<-filter(mass_data_gathered, type_of_data=="SRL", !is.na(mass_measurement) )
+head(sort(table(srl.mass.data$unique_id),decreasing = TRUE))
+out<-filter(srl.mass.data,unique_id=="S20S2Ptilothrix deusta2")
 ```
 
-Are there any duplicates?
+Are there any duplicates for TD?
 ```{r}
-sum(table(mass_data$unique_id)>2)
+td.mass.data<-filter(mass_data_gathered, type_of_data=="TD", !is.na(mass_measurement) )
+head(sort(table(td.mass.data$unique_id),decreasing = TRUE))
+out<-filter(td.mass.data,unique_id=="S3S3Leptocarpus tenax3")
 ```
+
 make a column in the root length set that is the unique id for matching and check for duplicates
+
 
 ```{r}
 root_length_data$unique_id<-paste0(root_length_data$site,root_length_data$sample,root_length_data$species,root_length_data$replicate)
@@ -46,28 +54,28 @@ sum(table(root_length_data$unique_id)>1)
 Unique IDs in mass data that don't match the root length data
 
 ```{r}
-mass_data$unique_id[!mass_data$unique_id %in% root_length_data$unique_id]
+srl.mass.data$unique_id[!srl.mass.data$unique_id %in% root_length_data$unique_id]
 ```
 
 
 Things in root length data that don't match the mass data.
 
 ```{r}
-root_length_data$unique_id[!root_length_data$unique_id %in% mass_data$unique_id]
+root_length_data$unique_id[!root_length_data$unique_id %in% srl.mass.data$unique_id]
 ```
 
 Then we match everything up and calculate SRL
 
 ```{r,message=FALSE,eval=TRUE,echo=TRUE}
-full_join(mass_data,root_length_data,by="unique_id") %>%
-  mutate(specific_root_length=Length_cm/SRL) -> SRL.DF
+inner_join(srl.mass.data,root_length_data,by="unique_id") %>%
+  mutate(specific_root_length=Length_cm/mass_measurement) -> SRL.DF
 ```
 
 
 ```{r,message=FALSE,eval=FALSE,echo=FALSE}
 library(plotly)
 gg<-ggplot(SRL.DF,aes(x=specific_root_length,fill=species_code.x))+geom_histogram()+scale_x_log10()
-
+gg
 ggplotly(gg)
 
 ```
@@ -76,12 +84,12 @@ Checking the outliers
 
 ```{r,echo=TRUE,eval=TRUE}
 arrange(SRL.DF,desc(specific_root_length)) %>%
-  select(unique_id=unique_id,mass=SRL,Length_cm=Length_cm,srl=specific_root_length)->SRL.DF.ORDERED
+  select(unique_id=unique_id,mass=mass_measurement,Length_cm=Length_cm,srl=specific_root_length)->SRL.DF.ORDERED
 
 SRL.DF.ORDERED[1:10,]
 
 arrange(SRL.DF,specific_root_length) %>%
-  select(unique_id=unique_id,mass=SRL,Length_cm=Length_cm,srl=specific_root_length)->SRL.DF.ORDERED
+  select(unique_id=unique_id,mass=mass_measurement,Length_cm=Length_cm,srl=specific_root_length)->SRL.DF.ORDERED
 
 SRL.DF.ORDERED[1:10,]
 ```
@@ -94,31 +102,37 @@ Checking for duplicate samples
 air_porosity$unique_id<-paste0(air_porosity$site,air_porosity$sample,air_porosity$species,air_porosity$replicate)
 out<-sort(table(air_porosity$unique_id),decreasing = TRUE)
 out[out>1]
-filter(air_porosity,unique_id=="S14S2Lepidosperma neesii2")
+out<-filter(air_porosity,unique_id=="S14S2Lepidosperma neesii2")
+```
 
+Checking the matching from
 
+```{r}
+air_porosity$unique_id[!air_porosity$unique_id %in% td.mass.data$unique_id]
+
+td.mass.data$unique_id[!td.mass.data$unique_id %in% air_porosity$unique_id]
 
 ```
+
 
 Calculate density:
 
 ```{r}
-full_join(air_porosity,mass_data,by=c("site", "sample","species")) %>%
-  select(site,sample,species,root_volume,TD) %>%
-  mutate(density=TD/root_volume)-> density.df
+inner_join(air_porosity,td.mass.data,by=c("site", "sample","species")) %>%
+  select(site,sample,species,root_volume,mass_measurement) %>%
+  mutate(density=mass_measurement/root_volume)-> density.df
 ```
 
 
 Check for missing values either for volume or for mass
 ```{r}
 density_missing_data<-filter(density.df,is.na(density))
-write_csv(density_missing_data,"outputs/density_missing_data.csv")
-density_missing_data
 ```
 
 
 ```{r}
 gg<-ggplot(density.df,aes(x=density,fill=species))+geom_histogram()+scale_x_log10()
+gg
 ```
 
 
@@ -129,3 +143,76 @@ arrange(density.df,density)
 
 arrange(density.df,desc(density)) 
 ```
+
+
+### Air porosity
+
+```{r}
+filter(air_porosity,air_porosity>0) %>%
+ggplot(aes(y=air_porosity,x=species))+geom_point()
+
+filter(air_porosity,air_porosity>0) %>%
+  group_by(species) %>%
+  summarize(mean(air_porosity))%>%
+  knitr::kable(digits=2)
+```
+
+Possible ones that are crazy
+
+```{r}
+filter(air_porosity,air_porosity>35) 
+```
+
+
+### Number of tips
+
+```{r}
+root_length_data<- mutate(root_length_data,rbi=Number_of_tips/Length_cm)
+
+filter(root_length_data,rbi>7) 
+
+
+ggplot(root_length_data,aes(y=rbi,x=species))+geom_point()
+filter(root_length_data,rbi<7) %>%
+  group_by(species) %>%
+  summarize(mean.rbi=mean(rbi))%>%
+  arrange(mean.rbi)%>%
+  knitr::kable(digits=2)
+```
+
+## Calulating median soil moisture values by species
+
+```{r}
+soil_moisture<-read_csv("data/Soil_Moisture.csv")
+test<-inner_join(soil_moisture,mass_data_gathered)
+
+group_by(test,species)%>%
+  summarize(median.OM=median(OM),cv.OM=sd(OM)/mean(OM))%>%
+  arrange(median.OM) -> species_median_OM
+```
+
+## Assmbling the mega_csv
+
+```{r}
+srl.for.joining<-select(SRL.DF,site=site.x,sample=sample.x,species=species.x,srl=specific_root_length,unique_id)
+density.df.for.joining<-select(density.df,site,sample,species,density)
+root.length.data.for.joining<-select(root_length_data,site,sample,species,rbi)
+air.porosity.for.joining<-select(air_porosity,site,sample,species,air_porosity)
+mean.soil<-summarize(group_by(soil_moisture,site),som=mean(OM))
+
+full_join(density.df.for.joining,root.length.data.for.joining) %>%
+   full_join(srl.for.joining) %>%
+  full_join(air.porosity.for.joining) %>%
+    full_join(mean.soil) ->mass_df
+
+  write_csv(mass_df,"mass_output.csv")
+  
+  filter(mass_df,air_porosity>0)%>%
+  ggplot(aes(x=som,y=air_porosity))+geom_point()+geom_smooth(method = "lm",se=FALSE)+scale_x_log10()->gg
+  ggplotly(gg)
+  
+  ggplot(aes(x=som,y=air_porosity))+geom_point()+geom_smooth(method = "lm",se=FALSE)+scale_x_log10()->gg
+  ggplotly(gg)
+  
+```
+
