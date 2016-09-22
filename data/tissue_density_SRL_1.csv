@@ -21,14 +21,6 @@ S10,S1,UW,Ptilothrix deusta,pti,1,0.1941,0.0036
 S10,S2,UW,Ptilothrix deusta,pti,2,0.1412,0.0093
 S10,S3,UW,Ptilothrix deusta,pti,3,0.1839,0.0202
 S14,S3,IB,Entolasia stricta,ento,3,0.0478,
-S14,S1,IB,Gonocarpus micranthus,gono,1,0.0245,
-S14,S2,IB,Gonocarpus micranthus,gono,2,0.0295,
-S14,S3,IB,Gonocarpus micranthus,gono,3,0.0268,
-S14,S2,IB,Gonocarpus tetragynus,tetra,2,0.0324,
-S14,S2,IB,Lepyrodia scariosa,lepy,2,0.0264,
-S14,S1,IB,Lomandra obliqua,loma,1,0.1674,
-S14,S2,IB,Lomandra obliqua,loma,2,0.0426,
-S14,S3,IB,Lomandra obliqua,loma,3,0.1721,
 S15,S1,IU,Banksia ericifolia,eric,1,0.0477,0.0045
 S15,S2,IU,Banksia ericifolia,eric,2,0.0127,0.0456
 S15,S3,IU,Banksia ericifolia,eric,3,0.0243,0.0054
@@ -215,8 +207,7 @@ S9,S1,UW,Cyathochaeta diandra,cya,1,0.1056,0.008
 S9,S2,UW,Cyathochaeta diandra,cya,2,0.0479,0.0057
 S9,S3,UW,Cyathochaeta diandra,cya,3,0.1188,0.0093
 S9,S1,UW,Entolasia stricta,ento,1,0.0221,0.0008
-S9,S2,UW,Entolasia stricta,ento,2,0.0271,
-S9,S2,UW,Entolasia stricta,ento,2,,0.0032
+S9,S2,UW,Entolasia stricta,ento,2,0.0271,0.0032
 S9,S1,UW,Lepidosperma neesii,nee,1,0.0485,0.0159
 S9,S2,UW,Lepidosperma neesii,nee,2,,0.0106
 S9,S3,UW,Lepidosperma neesii,nee,3,,0.0123

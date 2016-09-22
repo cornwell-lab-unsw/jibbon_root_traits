@@ -55,9 +55,9 @@ S14,S3,IB,Cyathochaeta diandra,cya,3,0.0934,0.0017
 S14,S1,IB,Entolasia stricta,ento,1,0.0293,0.0027
 S14,S2,IB,Entolasia stricta,ento,2,0.0443,0.0005
 S14,S3,IB,Entolasia stricta,ento,3,0.0628,0.0006
-S14,S1,IB,Gonocarpus micranthus,gono,1,,0.0008
-S14,S2,IB,Gonocarpus micranthus,gono,2,,0.0004
-S14,S3,IB,Gonocarpus micranthus,gono,3,,0.0006
+S14,S1,IB,Gonocarpus micranthus,gono,1,0.0252,0.0008
+S14,S2,IB,Gonocarpus micranthus,gono,2,0.0304,0.0004
+S14,S3,IB,Gonocarpus micranthus,gono,3,0.0271,0.0006
 S14,S1,IB,Gonocarpus tetragynus,tetra,1,0.0271,0.0029
 S14,S2,IB,Gonocarpus tetragynus,tetra,2,0.0086,0.0023
 S14,S3,IB,Gonocarpus tetragynus,tetra,3,0.009,
@@ -69,11 +69,11 @@ S14,S1,IB,Leptocarpus tenax,tenax,1,0.0193,0.003
 S14,S1,IB,Leptospermum squarrosum,lepto,1,0.0061,0.0003
 S14,S2,IB,Leptospermum squarrosum,lepto,2,0.0131,0.0006
 S14,S1,IB,Lepyrodia scariosa,lepy,1,0.0442,0.002
-S14,S2,IB,Lepyrodia scariosa,lepy,2,,0.0006
+S14,S2,IB,Lepyrodia scariosa,lepy,2,0.0275,0.0006
 S14,S3,IB,Lepyrodia scariosa,lepy,3,0.0587,0.0006
-S14,S1,IB,Lomandra obliqua,loma,1,,0.0037
-S14,S2,IB,Lomandra obliqua,loma,2,,0.0189
-S14,S3,IB,Lomandra obliqua,loma,3,,0.0036
+S14,S1,IB,Lomandra obliqua,loma,1,0.177,0.0037
+S14,S2,IB,Lomandra obliqua,loma,2,0.0452,0.0189
+S14,S3,IB,Lomandra obliqua,loma,3,0.1801,0.0036
 S14,S1,IB,Plinthanthesis paradoxa,plin,1,,0.006
 S14,S2,IB,Plinthanthesis paradoxa,plin,2,0.0474,0.0023
 S14,S3,IB,Plinthanthesis paradoxa,plin,3,,0.0013
@@ -212,7 +212,7 @@ S3,S2,IB,Banksia ericifolia,eric,2,0.0372,0.0028
 S3,S3,IB,Banksia ericifolia,eric,3,0.0366,0.0037
 S3,S1,IB,Cyathochaeta diandra,cya,1,0.0263,0.0177
 S3,S2,IB,Cyathochaeta diandra,cya,2,0.026,0.0028
-S3,S3,IB,Cyathochaeta diandra,cya,3,,0.002
+S3,S3,IB,Cyathochaeta diandra,cya,3,0.0217,0.002
 S3,S1,IB,Entolasia stricta,ento,1,0.0158,0.0042
 S3,S2,IB,Entolasia stricta,ento,2,0.084,0.0016
 S3,S3,IB,Entolasia stricta,ento,3,0.0637,0.0017
@@ -227,9 +227,8 @@ S3,S2,IB,Lepidosperma neesii,nee,2,0.0544,0.002
 S3,S3,IB,Lepidosperma neesii,nee,3,,0.0007
 S3,S1,IB,Leptocarpus tenax,tenax,1,0.0486,0.0015
 S3,S2,IB,Leptocarpus tenax,tenax,2,0.0434,0.0009
-S3,S2,IB,Leptocarpus tenax,lepy,2,,0.0008
 S3,S3,IB,Leptocarpus tenax,tenax,3,0.0309,0.0008
-S3,S3,IB,Leptocarpus tenax,lepy,3,0.0258,0.0026
+S3,S3,IB,Lepyrodia scariosa,lepy,3,0.0258,0.0026
 S3,S1,IB,Leptospermum squarrosum,lepto,1,0.0069,0.0016
 S3,S2,IB,Leptospermum squarrosum,lepto,2,0.0394,0.0019
 S3,S3,IB,Leptospermum squarrosum,lepto,3,0.0312,0.0011
@@ -320,7 +319,7 @@ S7,S2,BW,Gonocarpus micranthus,gono,2,0.0093,0.0048
 S7,S3,BW,Gonocarpus micranthus,gono,3,0.0079,0.0054
 S7,S1,BW,Leptospermum squarrosum,lepto,1,0.0336,0.0103
 S7,S2,BW,Leptospermum squarrosum,lepto,2,0.0064,0.0014
-S7,S3,BW,Leptospermum squarrosum,lepto,3,,0.0035
+S7,S3,BW,Leptospermum squarrosum,lepto,3,0.0041,0.0035
 S7,S1,BW,Plinthanthesis paradoxa,plin,1,0.0167,0.0044
 S7,S2,BW,Plinthanthesis paradoxa,plin,2,0.0104,0.0142
 S7,S3,BW,Plinthanthesis paradoxa,plin,3,0.0168,0.0041
@@ -331,3 +330,4 @@ S8,S1,BD,Entolasia stricta,ento,1,0.0331,0.0145
 S8,S1,BD,Plinthanthesis paradoxa,plin,1,0.0242,0.0084
 S8,S2,BD,Plinthanthesis paradoxa,plin,2,0.012,0.0101
 S8,S3,BD,Plinthanthesis paradoxa,plin,3,0.0129,0.0064
+S3,S3,IB,Lepyrodia scariosa,lepy,3,0.0255,
