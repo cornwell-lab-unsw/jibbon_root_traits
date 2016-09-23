@@ -1,0 +1,65 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+Loading all the data
+```{r load packages and import data,echo=TRUE,message=FALSE}
+library(tidyverse)
+air_porosity<-read_csv("data/air_porosity_complete.csv")
+cluster_root_weight<-read_csv("data/cluster_root_weight_data_complete.csv")
+dry_root_weight_1<-read_csv("data/tissue_density_SRL_1.csv")
+dry_root_weight_2<-read_csv("data/tissue_density_SRL_2.csv")
+root_length_data<-read_csv("data/branching_intensity_srl_lenght_complete.csv")
+```
+
+
+make a column in the mass data set that is the unique id for matching
+```{r unique ids}
+dry_root_weight_2$unique_id<-paste0(dry_root_weight_2$site,dry_root_weight_2$sample,dry_root_weight_2$species,dry_root_weight_2$replicate)
+
+dry_root_weight_1$unique_id<-paste0(dry_root_weight_1$site,dry_root_weight_1$sample,dry_root_weight_1$species,dry_root_weight_1$replicate)
+```
+
+```{r}
+
+dry_root_weight_2 %>% 
+  anti_join(., dry_root_weight_1, by = "unique_id") -> dry_weight_only2
+
+dry_root_weight_1 %>% 
+  anti_join(., dry_root_weight_2, by = "unique_id") -> dry_weight_only1
+
+mass_data <- rbind(dry_weight_only1, dry_weight_only2)
+
+```
+
+
+```{r}
+
+dry_root_weight_1 %>% 
+  select(-site, -sample, -site_class, -species, -species_code, -replicate) %>% 
+inner_join(dry_root_weight_2, ., by = "unique_id", na.omit = TRUE) -> testing
+  
+TD <- with(testing, data.frame(TD=ifelse(is.na(TD.y), TD.x, TD.y)))
+SRL <- with(testing, data.frame(SRL=ifelse(is.na(SRL.y), SRL.x, SRL.y)))
+
+cbind(testing, TD, SRL) %>% select(-TD.x, -TD.y, -SRL.x, -SRL.y) %>% 
+select(site, sample, site_class, species, species_code, replicate, TD, SRL, unique_id) -> testing.worked
+
+
+```
+
+
+```{r}
+
+
+worked <- rbind(testing.worked, mass_data)
+
+```
+
+
+Are there any duplicates?
+```{r duplicates}
+sum(table(worked$unique_id)>2)
+```
+

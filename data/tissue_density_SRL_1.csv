@@ -7,20 +7,19 @@ S10,S1,UW,Entolasia stricta,ento,1,0.0067,0.0027
 S10,S2,UW,Entolasia stricta,ento,2,0.1531,0.0022
 S10,S3,UW,Entolasia stricta,ento,3,0.0581,0.006
 S10,S1,UW,Gonocarpus micranthus,gono,1,0.0289,0.0039
-S10,S2,UW,Gonocarpus micranthus,gono,2,0.0227,
+S10,S2,UW,Gonocarpus micranthus,gono,2,0.0227,0.018
 S10,S3,UW,Gonocarpus micranthus,gono,3,0.0191,0.0021
 S10,S1,UW,Lepidosperma neesii ,nee,1,0.1177,0.0022
 S10,S2,UW,Lepidosperma neesii ,nee,2,0.0908,0.0046
 S10,S3,UW,Lepidosperma neesii ,nee,3,0.1019,0.0041
 S10,S1,UW,Leptospermum squarrosum,lepto,1,0.0599,0.0013
-S10,S2,UW,Leptospermum squarrosum,lepto,2,0.0261,
+S10,S2,UW,Leptospermum squarrosum,lepto,2,0.0261,0.0018
 S10,S1,UW,Plinthanthesis paradoxa,plin,1,0.0213,0.0029
 S10,S2,UW,Plinthanthesis paradoxa,plin,2,0.0277,0.0014
 S10,S3,UW,Plinthanthesis paradoxa,plin,3,0.1083,0.0026
 S10,S1,UW,Ptilothrix deusta,pti,1,0.1941,0.0036
 S10,S2,UW,Ptilothrix deusta,pti,2,0.1412,0.0093
 S10,S3,UW,Ptilothrix deusta,pti,3,0.1839,0.0202
-S14,S3,IB,Entolasia stricta,ento,3,0.0478,
 S15,S1,IU,Banksia ericifolia,eric,1,0.0477,0.0045
 S15,S2,IU,Banksia ericifolia,eric,2,0.0127,0.0456
 S15,S3,IU,Banksia ericifolia,eric,3,0.0243,0.0054
@@ -46,7 +45,7 @@ S15,S1,IU,Lepyrodia scariosa,lepy,1,0.336,0.0022
 S15,S2,IU,Lepyrodia scariosa,lepy,2,0.0124,0.0018
 S15,S3,IU,Lepyrodia scariosa,lepy,3,0.0068,0.0005
 S15,S1,IU,Lomandra obliqua,loma,1,0.0307,0.003
-S15,S2,IU,Lomandra obliqua,loma,2,0.0427,
+S15,S2,IU,Lomandra obliqua,loma,2,0.0427,0.0041
 S15,S3,IU,Lomandra obliqua,loma,3,0.0742,
 S15,S1,IU,Plinthanthesis paradoxa,plin,1,0.0096,0.0016
 S15,S1,IU,Ptilothrix deusta,pti,1,0.1779,0.0486
@@ -57,9 +56,9 @@ S17,S1,IU,Cyathochaeta diandra,cya,1,0.1111,
 S17,S2,IU,Empodisma minus,emp,2,0.0788,
 S17,S1,IB,Entolasia stricta,ento,1,0.0046,
 S17,S1,IU,Eurychorda complanata,eury,1,0.2151,
+S17,S1,IU,Gonocarpus tetragynus,tetra,1,0.0151,
 S17,S2,IB,Gonocarpus tetragynus,tetra,2,0.0381,
 S17,S3,IU,Gonocarpus tetragynus,tetra,3,0.0096,
-S17,S1,IU,Gonocarpus tetragynus,tetra,1,0.0151,
 S17,S2,IU,Lepidosperma neesii,nee,2,0.288,
 S17,S3,IU,Lepidosperma neesii,nee,3,0.0315,
 S17,S1,IU,Leptocarpus tenax,tenax,1,0.1245,
@@ -90,14 +89,13 @@ S18,S2,IB,Lepidosperma neesii,nee,2,,0.0131
 S18,S3,IB,Lepidosperma neesii,nee,3,0.458,
 S18,S1,IB,Leptocarpus tenax,tenax,1,0.121,
 S18,S2,IB,Leptocarpus tenax,tenax,2,0.2426,
-S18,S3,IB,Leptocarpus tenax,tenax,3,,
 S18,S1,IB,Leptospermum squarrosum,lepto,1,0.0166,0.001
 S18,S2,IB,Leptospermum squarrosum,lepto,2,0.0046,
 S18,S1,IB,Lepyrodia scariosa,lepy,1,0.0611,
 S18,S3,IB,Lepyrodia scariosa,lepy,3,0.0044,0.0047
 S18,S1,IB,Lomandra obliqua,loma,1,0.0057,
-S18,S2,IB,Lomandra obliqua,loma,2,,0.0039
-S18,S3,IB,Lomandra obliqua,loma,3,,0.0863
+S18,S2,IB,Lomandra obliqua,loma,2,,
+S18,S3,IB,Lomandra obliqua,loma,3,,
 S18,S1,IB,Plinthanthesis paradoxa,plin,1,0.0071,0.0045
 S18,S2,IB,Plinthanthesis paradoxa,plin,2,0.008,0.0035
 S18,S3,IB,Plinthanthesis paradoxa,plin,3,0.0064,0.0016
@@ -115,7 +113,7 @@ S20,S1,IB,Cyathochaeta diandra,cya,1,0.0434,0.0041
 S20,S2,IB,Cyathochaeta diandra,cya,2,0.0622,0.0052
 S20,S3,IB,Cyathochaeta diandra,cya,3,0.0882,0.0056
 S20,S1,IB,Empodisma minus,emp,1,0.0264,0.0057
-S20,S2,IB,Empodisma minus,emp,2,,0.0045
+S20,S2,IB,Empodisma minus,emp,2,0.1049,0.0045
 S20,S3,IB,Empodisma minus,emp,3,0.1075,0.0301
 S20,S1,IB,Entolasia stricta,ento,1,0.0208,0.0021
 S20,S2,IB,Entolasia stricta,ento,2,0.0594,0.0014
@@ -126,7 +124,6 @@ S20,S2,IB,Eurychorda complanata,eury,2,0.0363,0.0072
 S20,S3,IB,Eurychorda complanata,eury,3,0.0756,0.0076
 S20,S1,IB,Gonocarpus micranthus,gono,1,0.0114,0.002
 S20,S2,IB,Gonocarpus micranthus,gono,2,0.0077,0.0014
-S20,S2,IB,Gonocarpus micranthus,gono,2,,0.0008
 S20,S3,IB,Gonocarpus micranthus,gono,3,0.0242,
 S20,S1,IB,Gonocarpus tetragynus,tetra,1,0.0313,0.0007
 S20,S2,IB,Gonocarpus tetragynus,tetra,2,0.053,0.0005
@@ -147,8 +144,7 @@ S20,S2,IB,Plinthanthesis paradoxa,plin,2,0.0345,
 S20,S3,IB,Plinthanthesis paradoxa,plin,3,0.0671,0.002
 S20,S4,IB,Plinthanthesis paradoxa,plin,4,0.0651,
 S20,S1,IB,Ptilothrix deusta,pti,1,0.0484,0.0192
-S20,S2,IB,Ptilothrix deusta,pti,2,0.172,
-S20,S2,IB,Ptilothrix deusta,pti,2,0.1049,0.0054
+S20,S2,IB,Ptilothrix deusta,pti,2,0.172,0.0054
 S20,S3,IB,Ptilothrix deusta,pti,3,0.1341,0.0006
 S4,S1,IU,Banksia ericifolia,eric,1,0.0289,0.007
 S4,S2,IU,Banksia ericifolia,eric,2,0.0146,0.0006

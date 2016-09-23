@@ -29,8 +29,8 @@ S11,S3,UD,Caustis pentandra,caustis,3,8.192,4
 S11,S1,UD,Hypoleana fastigata,hypo,1,7.125,23
 S11,S2,UD,Hypoleana fastigata,hypo,2,8.952,26
 S11,S3,UD,Hypoleana fastigata,hypo,3,3.947,13
-S11,S2,UD,Lepidosperma concavum,conca,2,9.556,3
 S11,S1,UD,Lepidosperma concavum,conca,1,14.389,20
+S11,S2,UD,Lepidosperma concavum,conca,2,9.556,3
 S11,S3,UD,Lepidosperma concavum,conca,3,5.563,4
 S11,S1,UD,Lomandra obliqua,loma,1,3.622,2
 S11,S2,UD,Lomandra obliqua,loma,2,12.86,7
@@ -125,7 +125,6 @@ S15,S2,IU,Lepyrodia scariosa ,lepy,2,5.17,8
 S15,S3,IU,Lepyrodia scariosa ,lepy,3,3.27,1
 S15,S1,IU,Lomandra obliqua,loma,1,7.008,4
 S15,S2,IU,Lomandra obliqua,loma,2,12.934,10
-S15,S3,IU,Lomandra obliqua,loma,3,14.505,7
 S15,S1,IU,Plinthanthesis paradoxa,plin,1,6.419,9
 S15,S1,IU,Ptilothrix deusta,pti,1,8.714,5
 S15,S2,IU,Ptilothrix deusta,pti,2,4.426,1
@@ -467,6 +466,7 @@ S8,S2,IB,Hypoleana fastigata,hypo,2,7.962,1
 S8,S3,IB,Hypoleana fastigata,hypo,3,8.335,12
 S8,S1,IB,Lepidosperma concavum,conca,1,8.58,15
 S8,S2,IB,Lepidosperma concavum,conca,2,3.44,0
+S8,S3,IB,Lepidosperma concavum,conca,3,10.151,12
 S8,S1,IB,Lomandra obliqua,loma,1,14.711,9
 S8,S2,IB,Lomandra obliqua,loma,2,6.081,3
 S8,S3,IB,Lomandra obliqua,loma,3,8.919,3
