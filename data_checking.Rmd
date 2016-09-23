@@ -14,11 +14,15 @@ This is file that loads all the raw data from the Jibbon root trait project.  Th
 Loading all the data
 ```{r,echo=TRUE,message=FALSE}
 library(tidyverse)
+library(plotly)
+library(lme4)
 air_porosity <- read_csv("data/air_porosity_complete.csv")
 cluster_root_weight <- read_csv("data/cluster_root_weight_data_complete.csv")
 dry_root_weight_1 <- read_csv("data/tissue_density_SRL_1.csv")
 dry_root_weight_2 <- read_csv("data/tissue_density_SRL_2.csv")
 root_length_data <- read_csv("data/branching_intensity_srl_lenght_complete.csv")
+soil_moisture <- read_csv("data/Soil_Moisture.csv")
+names(soil_moisture)[5]<-"SoilMoistureContent"
 ```
 
 
@@ -183,7 +187,7 @@ filter(root_length_data,rbi<7) %>%
 ## Calulating median soil moisture values by species
 
 ```{r}
-soil_moisture<-read_csv("data/Soil_Moisture.csv")
+
 test<-inner_join(soil_moisture,mass_data_gathered)
 
 group_by(test,species)%>%
@@ -199,7 +203,7 @@ srl.for.joining<-select(SRL.DF,site=site.x,sample=sample.x,species=species.x,srl
 density.df.for.joining<-select(density.df,site,sample,species,density)
 root.length.data.for.joining<-select(root_length_data,site,sample,species,rbi)
 air.porosity.for.joining<-select(air_porosity,site,sample,species,air_porosity)
-mean.soil<-summarize(group_by(soil_moisture,site),som=mean(OM))
+mean.soil<-summarize(group_by(soil_moisture,site),som=median(OM),smc=median(SoilMoistureContent))
 
 full_join(density.df.for.joining,root.length.data.for.joining) %>%
    full_join(srl.for.joining) %>%
@@ -207,13 +211,54 @@ full_join(density.df.for.joining,root.length.data.for.joining) %>%
     full_join(mean.soil) ->mass_df
 
   write_csv(mass_df,"mass_output.csv")
-  
-  #filter(mass_df,air_porosity>0)%>%
-  #ggplot(aes(x=som,y=air_porosity))+geom_point()+geom_smooth(method = "lm",se=FALSE)+scale_x_log10()->gg
-  #ggplotly(gg)
-  
-  #ggplot(aes(x=som,y=air_porosity))+geom_point()+geom_smooth(method = "lm",se=FALSE)+scale_x_log10()->gg
-  #ggplotly(gg)
-  
 ```
 
+
+Now some plotting
+
+ this summarizes by species in a very complicated way because
+ it's calculating 10-90 quantile ranges for SOM and SMC and SE for density
+ 
+  then it does some ggplotting  
+  
+```{r}
+sane<-filter(mass_df,density>0.05,density<1)  
+
+  summarize(group_by(sane,species),som.median=median(som),density.mean=mean(density),som.quant1=quantile(som,0.5)-quantile(som,0.1),som.quant2=quantile(som,0.9)-quantile(som,0.5),density.se=sd(density,na.rm=TRUE)/sqrt(sum(!is.na(density))),smc.median=median(smc),smc.quant1=quantile(smc,0.5)-quantile(smc,0.1),smc.quant2=quantile(smc,0.9)-quantile(smc,0.5))->temp    
+  
+  
+  ggplot(temp,aes(x=som.median,y=density.mean,col=species))+
+    geom_point()+
+   geom_errorbarh(aes(xmin=som.median-som.quant1,xmax=som.median+som.quant2,y=density.mean))+
+    geom_errorbar(aes(ymin=density.mean-density.se,ymax=density.mean+density.se))+theme_bw()+scale_x_log10(breaks=c(1:10))->gg
+  
+  ggplotly(gg)
+  
+  ggplot(temp,aes(x=smc.median,y=density.mean,col=species))+
+    geom_point()+
+   geom_errorbarh(aes(xmin=smc.median-smc.quant1,xmax=smc.median+smc.quant2,y=density.mean))+
+    geom_errorbar(aes(ymin=density.mean-density.se,ymax=density.mean+density.se))+theme_bw()+scale_x_log10(breaks=seq(10,100,10))
+```  
+
+
+Now filter to a dataset where we have >12 obs per species and run a mixed model.  
+  
+```{r}  
+  
+  
+    saner<-filter(sane,species%in%names(table(sane$species))[table(sane$species)>12])
+  
+  
+   ggplot(saner,aes(x=som,y=density,col=species))+
+     geom_smooth(method="lm",se=F)+scale_x_log10()
+  
+  
+  
+  mod <- lmer(density ~ log(som) + (1|species),data = sane, REML=T)
+  mod.0 <- lmer(density ~  (1|species),data = sane, REML=T)
+  anova(mod,mod.0)
+  
+```
+read [here](http://environmentalcomputing.net/mixed-models-1/)
+
+for more
