@@ -1,0 +1,57 @@
+---
+title: "Results"
+author: "Guy Taseski and Will Cornwell"
+date: "September 26, 2016"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(plotly)
+read_csv("mass_output.csv") %>%
+  filter(!is.na(species)) -> mass_df
+
+```
+
+# Trends in Density across species
+
+Here is some text about what the results actually are.  
+
+Here is a plot.
+
+```{r,echo=FALSE,eval=FALSE}
+group_by(mass_df,species) %>%
+summarize(
+          som.median=median(som),
+          density.mean=mean(density,na.rm=TRUE),
+          som.quant1=quantile(som,0.5)-quantile(som,0.1),
+          som.quant2=quantile(som,0.9)-quantile(som,0.5),
+          density.se=sd(density,na.rm=TRUE)/sqrt(sum(!is.na(density))),
+          smc.median=median(smc),
+          smc.quant1=quantile(smc,0.5)-quantile(smc,0.1),
+          smc.quant2=quantile(smc,0.9)-quantile(smc,0.5)
+          )->temp    
+
+
+ggplot(temp,aes(x=som.median,y=density.mean,col=species))+
+  geom_point()+
+  geom_errorbarh(aes(xmin=som.median-som.quant1,xmax=som.median+som.quant2,y=density.mean))+
+  geom_errorbar(aes(ymin=density.mean-density.se,ymax=density.mean+density.se))+
+  theme_bw()+
+  scale_x_log10(breaks=c(1:10))+ 
+  theme(legend.text=element_text(size=7))->gg
+gg
+```
+
+
+Here is some statistical analysis
+
+```{r}
+
+```
+
+# Trends in SRL across species
+
+
+
+

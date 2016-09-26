@@ -19,3 +19,9 @@ vignettes/*.pdf
 .httr-oauth
 .DS_store
 .Rproj.user
+
+outputs
+data_checking.html
+results.html
+results.docx
+data_checking.html

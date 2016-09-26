@@ -224,7 +224,7 @@ Now some plotting
 ```{r}
 sane<-filter(mass_df,density>0.05,density<1)  
 
-  summarize(group_by(sane,species),som.median=median(som),density.mean=mean(density),som.quant1=quantile(som,0.5)-quantile(som,0.1),som.quant2=quantile(som,0.9)-quantile(som,0.5),density.se=sd(density,na.rm=TRUE)/sqrt(sum(!is.na(density))),smc.median=median(smc),smc.quant1=quantile(smc,0.5)-quantile(smc,0.1),smc.quant2=quantile(smc,0.9)-quantile(smc,0.5))->temp    
+  summarize(group_by(mass_df,species),som.median=median(som),density.mean=mean(density,na.rm=TRUE),som.quant1=quantile(som,0.5)-quantile(som,0.1),som.quant2=quantile(som,0.9)-quantile(som,0.5),density.se=sd(density,na.rm=TRUE)/sqrt(sum(!is.na(density))),smc.median=median(smc),smc.quant1=quantile(smc,0.5)-quantile(smc,0.1),smc.quant2=quantile(smc,0.9)-quantile(smc,0.5))->temp    
   
   
   ggplot(temp,aes(x=som.median,y=density.mean,col=species))+
