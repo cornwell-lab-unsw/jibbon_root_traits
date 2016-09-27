@@ -1,0 +1,84 @@
+---
+title: "RDMC"
+output: html_document
+---
+
+Loading all the data
+```{r load packages and import data,echo=TRUE,message=FALSE}
+library(tidyverse)
+air_porosity<-read_csv("data/air_porosity_complete.csv")
+dry_root_weight_1<-read_csv("data/tissue_density_SRL_1.csv")
+dry_root_weight_2<-read_csv("data/tissue_density_SRL_2.csv")
+soil_moisture <- read_csv("data/Soil_Moisture.csv")
+```
+
+
+```{r unique ids}
+bind_rows(dry_root_weight_1,dry_root_weight_2) %>%
+  unite(unique_id, site, sample, species, sep = "") %>%
+  gather(key=type_of_data,value = mass_measurement,SRL,TD) -> mass_data_gathered
+
+air_porosity_ids <-unite(air_porosity, unique_id, site, sample, species, sep = "", remove = FALSE)
+
+```
+
+```{r}
+full_join(mass_data_gathered, air_porosity_ids, by = "unique_id") %>%
+select(unique_id, fresh_mass_of_roots, type_of_data, mass_measurement, site, species, sample) -> RDMC_joined
+RDMC_joined$type_of_data[is.na(RDMC_joined$type_of_data)] <- "fresh"
+RDMC_joined %>% 
+filter(type_of_data != "SRL") %>%
+na.omit() ->RDMC_joined
+```
+
+Calculate
+
+```{r}
+names(RDMC_joined)
+mutate(RDMC_joined, RDMC=mass_measurement/fresh_mass_of_roots) -> RDMC_fixed
+mutate(RDMC_fixed, log(RDMC)) -> RDMC_fixed
+# filter(RDMC_fixed, RDMC < 1) -> RDMC_fixed
+```
+
+Creating mega RDMC file
+```{r}
+mean.soil<-summarize(group_by(soil_moisture,site),
+                     som=median(OM),
+                     smc=median(Soil_Moisture_Content))
+
+RDMC_good<-select(RDMC_fixed, site, species, sample, RDMC)
+full_join(mean.soil, RDMC_good, by = "site") %>% 
+  filter(site != "S1") %>% 
+  filter(site != "S2") -> RDMC_super
+```
+
+PLOTS n shit
+
+```{r}
+poke<-ggplot(RDMC_fixed,aes(x=(RDMC+1)))+geom_histogram()+scale_x_log10()
+poke
+```
+
+```{r}
+#Moist vs RDMC
+summarize(group_by(RDMC_super,species),
+          som.median=median(som),
+          RDMC.mean=mean(RDMC),
+          som.quant1=quantile(som,0.5)-quantile(som,0.1),
+          som.quant2=quantile(som,0.9)-quantile(som,0.5),
+          RDMC.se=sd(RDMC,na.rm=TRUE)/sqrt(sum(!is.na(RDMC))),
+          smc.median=median(smc),
+          smc.quant1=quantile(smc,0.5)-quantile(smc,0.1),
+          smc.quant2=quantile(smc,0.9)-quantile(smc,0.5))->temper
+
+ggplot(temper,aes(x=som.median,y=RDMC.mean,col=species))+
+    geom_point()+
+   geom_errorbarh(aes(xmin=som.median-som.quant1,xmax=som.median+som.quant2,y=RDMC.mean))+
+    geom_errorbar(aes(ymin=RDMC.mean-RDMC.se,ymax=RDMC.mean+RDMC.se))+theme_bw()->gg
+
+  gg
+```
+
+
+
+
