@@ -2,15 +2,29 @@
 title: "Results"
 author: "Guy Taseski and Will Cornwell"
 date: "September 26, 2016"
-output: word_document
+output: html_document
 ---
+
+#STARTUP crap
 
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(plotly)
 read_csv("mass_output.csv") %>%
   filter(!is.na(species)) -> mass_df
+```
 
+# RDMC vs Tissue Density
+
+```{r}
+#Makes graphs
+filter(mass_df, !RDMC > 1) -> Plot_TD_RDMC
+hist(Plot_TD_RDMC$RDMC)
+N<-ggplot(Plot_TD_RDMC, aes(x = RDMC, y = density, colour = species)) + geom_point() + geom_abline()
+ggplotly(N)
+#Summary_STATS
+lm_RDMC_TD<-lm(Plot_TD_RDMC$RDMC ~ Plot_TD_RDMC$density)
+summary(lm_RDMC_TD)
 ```
 
 # Trends in Density across species
@@ -47,7 +61,17 @@ gg
 Here is some statistical analysis
 
 ```{r}
+#Transformations
+mass_df$log_density <- log10(mass_df$density) 
+mass_df$sqrt_density <- sqrt(mass_df$density)
 
+qqnorm(mass_df$density)
+qqnorm(mass_df$log_density)
+qqnorm(mass_df$sqrt_density)
+
+fart <- lm(mass_df$som ~ mass_df$sqrt_density)
+anova(fart)
+summary(fart)
 ```
 
 # Trends in SRL across species

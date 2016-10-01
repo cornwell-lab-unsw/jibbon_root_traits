@@ -184,9 +184,40 @@ filter(root_length_data,rbi<7) %>%
   knitr::kable(digits=2)
 ```
 
-## Calulating median soil moisture values by species
+###Calculating RDMC
 
 ```{r}
+# air_porosity_ids <-unite(air_porosity, unique_id, site, sample, species, sep = "", remove = FALSE)
+
+inner_join(air_porosity, mass_data_gathered, by = "unique_id") %>% 
+select(unique_id, fresh_mass_of_roots, type_of_data, mass_measurement, site.x, species.x, sample.x) -> RDMC_joined
+
+RDMC_joined <- rename(RDMC_joined, "site" = site.x, "sample" = sample.x, "species" = species.x)
+
+RDMC_joined$type_of_data[is.na(RDMC_joined$type_of_data)] <- "fresh"
+RDMC_joined %>% 
+filter(type_of_data != "SRL") %>%
+na.omit() ->RDMC_joined
+
+```
+
+Calculate
+
+```{r}
+mutate(RDMC_joined, RDMC=mass_measurement/fresh_mass_of_roots) -> RDMC_fixed
+```
+
+
+PLOTS n shit
+
+```{r histogram RDMC fixed}
+poke<-ggplot(RDMC_fixed,aes(x=(RDMC+1)))+geom_histogram()+scale_x_log10()
+poke
+```
+
+## Calulating median soil moisture values by species
+
+```{r }
 
 test<-inner_join(soil_moisture,mass_data_gathered)
 
@@ -204,14 +235,39 @@ density.df.for.joining<-select(density.df,site,sample,species,density)
 root.length.data.for.joining<-select(root_length_data,site,sample,species,rbi)
 air.porosity.for.joining<-select(air_porosity,site,sample,species,air_porosity)
 mean.soil<-summarize(group_by(soil_moisture,site),som=median(OM),smc=median(SoilMoistureContent))
+RDMC.for.joining<-select(RDMC_fixed,site,sample,species,RDMC)
+
 
 full_join(density.df.for.joining,root.length.data.for.joining) %>%
    full_join(srl.for.joining) %>%
   full_join(air.porosity.for.joining) %>%
+  full_join(RDMC.for.joining) %>% 
     full_join(mean.soil) ->mass_df
 
   write_csv(mass_df,"mass_output.csv")
 ```
+
+
+```{r}
+#Moist vs RDMC
+summarise(group_by(mass_df,species),
+          som.median=median(som),
+          RDMC.mean=mean(RDMC),
+          som.quant1=quantile(som,0.5)-quantile(som,0.1),
+          som.quant2=quantile(som,0.9)-quantile(som,0.5),
+          RDMC.se=sd(RDMC,na.rm=TRUE)/sqrt(sum(!is.na(RDMC))),
+          smc.median=median(smc),
+          smc.quant1=quantile(smc,0.5)-quantile(smc,0.1),
+          smc.quant2=quantile(smc,0.9)-quantile(smc,0.5))->temper
+
+ggplot(temper,aes(x=som.median,y=RDMC.mean,col=species))+
+    geom_point()+
+   geom_errorbarh(aes(xmin=som.median-som.quant1,xmax=som.median+som.quant2,y=RDMC.mean))+
+    geom_errorbar(aes(ymin=RDMC.mean-RDMC.se,ymax=RDMC.mean+RDMC.se))+theme_bw()->gg
+
+  gg
+```
+
 
 
 Now some plotting
