@@ -12,10 +12,17 @@ library(lme4)
 read_csv("mass_output.csv") %>%
   filter(!is.na(species)) -> mass_df
 ```
+#RESULTS
 
-#TRAIT TRENDS ACROSS SPECIES
+##Trait Community Relationships
 
-##Tissue Density across species
+Strong relationships were identified for community trait mean values across a Hydrological gradient. Root Tissue Density (RTD) exhibited a significant difference across the hydrological gradient (F(1,465)= 36.352, P = 3.359e-09). Similarly, Root Dry Mass Content (RDMC) also exhibited a significant difference across the hydrological gradient (F(1,465)= 23.736, P = 1.517e-06). These results suggest that at a community level, species whose roots are less dense and have higher water contents will be filtered out from the community as it transitions into a drier environment. However out results do not support the notion that plants with high RTD and RDMC will be excluded from the wet end of the hydrological gradient (See figure 1 and 2) as a species which possessed both high RTD and RDMC was sampled from both the driest and wettest parts of the hydrological gradient suggesting that biological interactions or some other force may be prevent certain high RTD and RDMC species from expanding their niches. 
+
+
+
+##TRAIT TRENDS ACROSS SPECIES
+
+###Tissue Density across species
 
 ```{r, eval=TRUE, echo = FALSE}
 group_by(mass_df,species) %>%
@@ -44,6 +51,7 @@ ggplotly(gg)
 
 td_lm <- lm(mass_df$som ~ mass_df$density)
 anova(td_lm)
+summary(td_lm)
 ```
 
 ## RDMC across species
@@ -75,6 +83,7 @@ ggplotly(gg)
 
 RDMC_lm <- lm(mass_df$som ~ mass_df$RDMC)
 anova(RDMC_lm)
+summary(RDMC_lm)
 
 ```
 
