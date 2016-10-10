@@ -11,18 +11,39 @@ library(plotly)
 library(lme4)
 read_csv("mass_output.csv") %>%
   filter(!is.na(species)) -> mass_df
+read_csv("Soil_Moisture.csv") %>% 
+  filter(OM <= 20, Moisture <=100) ->soil_moisture_clean
 ```
 #RESULTS
 
+##Soil Organic Matter vs. Soil Moisture 
+
+The organic matter content of the soil was used as the basis of our hydrological gradient. It is highly correlated with moisture content of the soil (R = 0.4762) and also provides a stable long term estimate of the water content of the soil, rather than soil moisture measurements which fluctuate more readily in accordance to a variety of variables.
+
+```{r, eval=TRUE, echo = FALSE}
+##PLOT##
+ggplot(soil_moisture_clean, aes(x = Moisture, y = OM)) + geom_point() + geom_smooth(method = "lm") + theme_bw() -> plot_SM
+plot_SM
+##STATS##
+SM_lm <- lm(mass_df$som ~ mass_df$smc)
+anova(SM_lm)
+summary(SM_lm)
+```
+
+
 ##Trait Community Relationships
+
+Interspecific
 
 Strong relationships were identified for community trait mean values across a Hydrological gradient. Root Tissue Density (RTD) exhibited a significant difference across the hydrological gradient (F(1,465)= 36.352, P = 3.359e-09). Similarly, Root Dry Mass Content (RDMC) also exhibited a significant difference across the hydrological gradient (F(1,465)= 23.736, P = 1.517e-06). These results suggest that at a community level, species whose roots are less dense and have higher water contents will be filtered out from the community as it transitions into a drier environment. However out results do not support the notion that plants with high RTD and RDMC will be excluded from the wet end of the hydrological gradient (See figure 1 and 2) as a species which possessed both high RTD and RDMC was sampled from both the driest and wettest parts of the hydrological gradient suggesting that biological interactions or some other force may be prevent certain high RTD and RDMC species from expanding their niches. 
 
 
+However, certain traits did not differ significant across the hydrological gradient. Specific Root Length (SRL) failed to exhibit a difference across the gradient (F(1, 487) = 3.4717, P = 0.06303). As well as Root Branching Intensity (RBI) which also failed to demonstrate a difference in mean trait community values across the gradient (F(1, 487) = 2.6391, P = 0.1049). These results suggest that at a community level, RBI and SRL are not essential drivers of niche segregation across a hydrological gradient.
+
 
 ##TRAIT TRENDS ACROSS SPECIES
 
-###Tissue Density across species
+##Tissue Density across species
 
 ```{r, eval=TRUE, echo = FALSE}
 group_by(mass_df,species) %>%
@@ -44,14 +65,46 @@ ggplot(temp_TD,aes(x=som.median,y=density.mean,col=species))+
   geom_errorbar(aes(ymin=density.mean-density.se,ymax=density.mean+density.se))+
   theme_bw()+
   scale_x_log10(breaks=c(1:10))+ 
-  theme(legend.text=element_text(size=7))->gg
-ggplotly(gg)
+  theme(legend.text=element_text(size=7))->gg_TD_AS
+ggplotly(gg_TD_AS)
 
 #STATS
 
 td_lm <- lm(mass_df$som ~ mass_df$density)
 anova(td_lm)
 summary(td_lm)
+```
+
+##Root Branching Intensity across species
+
+```{r, eval=TRUE, echo = FALSE}
+group_by(mass_df,species) %>%
+summarize(
+          som.median=median(som),
+          rbi.mean=mean(rbi,na.rm=TRUE),
+          som.quant1=quantile(som,0.5)-quantile(som,0.1),
+          som.quant2=quantile(som,0.9)-quantile(som,0.5),
+          rbi.se=sd(rbi,na.rm=TRUE)/sqrt(sum(!is.na(rbi))),
+          smc.median=median(smc),
+          smc.quant1=quantile(smc,0.5)-quantile(smc,0.1),
+          smc.quant2=quantile(smc,0.9)-quantile(smc,0.5)
+          )->temp_rbi    
+
+
+ggplot(temp_rbi,aes(x=som.median,y=rbi.mean,col=species))+
+  geom_point()+
+  geom_errorbarh(aes(xmin=som.median-som.quant1,xmax=som.median+som.quant2,y=rbi.mean))+
+  geom_errorbar(aes(ymin=rbi.mean-rbi.se,ymax=rbi.mean+rbi.se))+
+  theme_bw()+
+  scale_x_log10(breaks=c(1:10))+ 
+  theme(legend.text=element_text(size=7))->gg_RBI_AS
+ggplotly(gg_RBI_AS)
+
+#STATS
+
+rbi_lm <- lm(mass_df$som ~ mass_df$rbi)
+anova(rbi_lm)
+summary(rbi_lm)
 ```
 
 ## RDMC across species
@@ -76,8 +129,8 @@ ggplot(temp_RDMC,aes(x=som.median,y=RDMC.mean,col=species))+
   geom_errorbar(aes(ymin=RDMC.mean-RDMC.se,ymax=RDMC.mean+RDMC.se))+
   theme_bw()+
   scale_x_log10(breaks=c(1:10))+ 
-  theme(legend.text=element_text(size=7))->gg
-ggplotly(gg)
+  theme(legend.text=element_text(size=7))->gg_RDMC_AS
+ggplotly(gg_RDMC_AS)
 
 #STATS
 
@@ -109,8 +162,8 @@ ggplot(temp_TD,aes(x=som.median,y=srl.mean,col=species))+
   geom_errorbar(aes(ymin=srl.mean-srl.se,ymax=srl.mean+srl.se))+
   theme_bw()+
   scale_x_log10(breaks=c(1:10))+ 
-  theme(legend.text=element_text(size=7))->gg
-ggplotly(gg)
+  theme(legend.text=element_text(size=7))->gg_SRL_AS
+ggplotly(gg_SRL_AS)
 
 #STATS
 
@@ -118,8 +171,14 @@ srl_lm <- lm(mass_df$som ~ mass_df$srl)
 anova(srl_lm)
 ```
 
+#Trait Individual Relationships
 
-# Trait Trends within species
+##Trait Trends within species
+
+Intraspecific Species Trends
+
+
+The intraspecific species variation did differ significant for most species across the hydrological gradient. The intraspecific variation for Root Tissue Density (RTD) within species showed an overall negative relationship with increasing soil organic moisture (p = 0.02935), with only Eurychorda complanata, Gonocarpus micranthus and Gonocarpus tetragynus showing a positive relationship with increase soil organic matter. The intraspecific variation for Root Dry Matter Content (RDMC) within species was far more mixed, with almost equal number of species showing positive and negative relationship to increasing soil organic matter (0.2009). This is an interesting result as both RDMC and RTD are highly correlated with each other (R2 = 0.7789), thus demonstrating that at both intraspecific and interspecific scales RTD is a good predictor for niche segregation across a hydrological gradient. The intraspecific species variation for Root Branching Intensity (RBI) and Specific Root Length (SRL) was both significant across the hydrological gradient. RBI showed an overall positive relationship (0.01991) with increasing soil organic matter, with only Cyathochaeta diandra, Ptilothrix deusta and Hypoleana fastigata showing an overall negative relationship across the gradient. Similarly, the intraspecific variation for Specific Root Length (SRL) showed an overall positive relationship with increasing soil organic matter, with only Lomandra oblique, Ptilothrix deusta and Banksia ericifolia showing a negative relationship across the gradient.
 
 ##Tissue Density within species
 
@@ -148,9 +207,22 @@ RDMC_clean<-filter(mass_df,species%in%names(table(mass_df$species))[table(mass_d
  anova(mod,mod.0)
 ```
 
+## RBI within Species
+
+```{r, echo = FALSE}
+#Cleaning Data for analysis
+rbi_clean<-filter(mass_df,species%in%names(table(mass_df$species))[table(mass_df$species)>11])
+#A plot
+ ggplot(rbi_clean,aes(x=som,y=rbi,col=species))+geom_smooth(method="lm",se=F)+scale_x_log10()
+ #Mixed effect model TD
+ mod <- lmer(rbi ~ log(som) + (1|species), data = rbi_clean, REML=T)
+ mod.0 <- lmer(rbi ~  (1|species), data = rbi_clean, REML=T)
+ anova(mod,mod.0)
+```
+
 ##SRL within species
 
-```{r, }
+```{r, echo = FALSE}
 #Cleaning Data for analysis
 srl_clean<-filter(mass_df,species%in%names(table(mass_df$species))[table(mass_df$species)>11])
 #A plot

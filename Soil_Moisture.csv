@@ -1,4 +1,4 @@
-site,Tray Weight,Wet Weight,Dry Weight,Soil_Moisture_Content,Crucible weight,Pre-Ashed Soil Weight,Pre-ashed Soil + Crucible,Post-ashed soil + Crucible,Post-ashed soil weight,OM,REP,site_class
+site,Tray Weight,Wet Weight,Dry Weight,Moisture,Crucible weight,Pre-Ashed Soil Weight,Pre-ashed Soil + Crucible,Post-ashed soil + Crucible,Post-ashed soil weight,OM,REP,site_class
 S1,1.8709,48.0457,40.6566,19.05109357,14.2153,10.0355,24.2508,23.7557,9.5404,5.189509874,1,BI
 S1,1.8617,52.8297,44.3178,20.04870914,20.0703,10.0163,30.0866,29.5414,9.4711,5.756459123,2,BI
 S1,1.8493,57.904,49.0985,18.63629437,13.2225,10.0826,23.3051,22.7457,9.5232,5.874075941,3,BI
