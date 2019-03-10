@@ -7,16 +7,61 @@ output: html_document
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-library(plotly)
+#library(plotly)
 library(lme4)
-read_csv("mass_output.csv") %>%
+read_csv("data/mass_output.csv") %>%
   filter(!is.na(species)) -> mass_df
-read_csv("Soil_Moisture.csv") %>% 
+read_csv("data/Soil_Moisture.csv") %>% 
   filter(OM <= 20, Moisture <=100) ->soil_moisture_clean
+read_csv("data/leaf_traits_jibbon.csv",col_types="cccdddcddcc") %>%
+  left_join(read_csv("data/jibbon_species_codes.csv"))->leaf
+
+
+
 ```
 #RESULTS
 
-##Soil Organic Matter vs. Soil Moisture 
+## calculate LMA
+
+
+```{r}
+leaf$lma <- leaf$dry_weight_g_ / leaf$`Area(cm)`
+leaf$ldmc<-leaf$dry_weight_g_/leaf$`fresh_weight(g)`
+
+filter(leaf,lma<1) -> leaf
+```
+
+## match leaf and root traits
+```{r}
+group_by(mass_df,species) %>%
+  summarize(root_density=mean(density,na.rm=T),root_branching_intensity=mean(rbi,na.rm=T),specific_root_length=mean(srl,na.rm=T),RDMC=mean(RDMC,na.rm=T),root_air_porosity=mean(air_porosity,na.rm=T))->rootmeans
+
+group_by(leaf,species) %>%
+  summarize(Leaf_Area=mean(`Area(cm)`,na.rm=T),Plant_Height=mean(`Height(cm)`,na.rm=T),leaf_mass_per_area=mean(lma,na.rm=T),
+            ldmc=mean(ldmc,na.rm=T))->leafmeans
+
+all<-full_join(leafmeans,rootmeans)
+
+```
+
+## making pairs plot
+
+```{r}
+library(ggcorrplot)
+corrall<-cor(all[,-1],use="pairwise")
+p.mat <- cor_pmat(all[,-1])
+
+ggcorrplot(corrall,
+  p.mat = p.mat, hc.order = FALSE,
+  type = "lower", insig = "blank"
+)
+ggsave("outputs/corrmat.pdf")
+ggsave("outputs/corrmat.png")
+```
+
+
+
+## Soil Organic Matter vs. Soil Moisture 
 
 The organic matter content of the soil was used as the basis of our hydrological gradient. It is highly correlated with moisture content of the soil (R = 0.4762) and also provides a stable long term estimate of the water content of the soil, rather than soil moisture measurements which fluctuate more readily in accordance to a variety of variables.
 

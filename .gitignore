@@ -20,7 +20,6 @@ vignettes/*.pdf
 .DS_store
 .Rproj.user
 
-outputs
 data_checking.html
 results.html
 results.docx
